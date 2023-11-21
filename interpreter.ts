@@ -24,6 +24,17 @@ export function standardEnvironment() {
 
 export const globalEnv = standardEnvironment();
 
+const functionDef = ([args, body], env) => {
+  return (...fnArgs) => {
+    const newEnv = {
+      ...env,
+    };
+    for (let i = 0; i < fnArgs.length; i++) {
+      newEnv[args[i].value] = fnArgs[i];
+    }
+    return interpretter(body, newEnv);
+  };
+};
 export const expr = ([firstArg, ...rest], env) => {
   const name = rest[0].value;
   switch (firstArg.value) {

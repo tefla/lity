@@ -79,9 +79,8 @@ export const word = (str) => P.string(str).thru(token);
 _p("Expression", () =>
   P.alt(_p("String"), _p("Number"), _p("List"), _p("Symbol"))
 );
-
 _p("String", () =>
-  token(P.regexp(/"((?:\\.|.)*?)"/, 1))
+  P.regexp(/"((?:\\.|.)*?)"/, 1)
     .map(interpretEscapes)
     .map((str) => new AstString(str))
     .desc("string")
@@ -116,9 +115,14 @@ _p("List", () =>
     .map((list) => new AstList(list))
 );
 // A file in Lisp is generally just zero or more expressions.
-_p("File", () =>
-  _p("Expression")
-    .trim(P.optWhitespace)
-    .many()
-    .map((list) => new AstFile(list))
-);
+export const registerFileParser = (interpreter, env) =>
+  _p("File", () =>
+    _p("Expression")
+      .map((x) => {
+        interpreter(x, env);
+        return x;
+      })
+      .trim(P.optWhitespace)
+      .many()
+      .map((list) => new AstFile(list))
+  );
