@@ -11,8 +11,10 @@ const parser = _p("File");
 
 let ast = parser.tryParse(`
 (defun square (y) (* y y))
-(defvar x 3)
-(pr (square x))
+(defun cube (z) (* z z z))
+(defvar x 9)
+(pr "Square of" x "is" (square x))
+(pr "Cube Cube of" x "is" (cube (cube x)))
 `);
 
 interpretter(ast, globalEnv);

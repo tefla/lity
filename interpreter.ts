@@ -52,7 +52,7 @@ export const expr = ([firstArg, ...rest], env) => {
       // The rest of the elements are the arguments.
       const vals = rest.map((ast) => interpretter(ast, env));
       if (typeof fn !== "function") {
-        throw new Error("Not a function: " + ast.value[0].value);
+        throw new Error("Not a function: " + firstArg.value);
       }
       return fn(...vals);
   }
