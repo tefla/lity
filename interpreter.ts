@@ -69,6 +69,9 @@ export const interpretter = (ast, env) => {
       case "symbol":
         // If we are here, we are looking up a variable.
         const value = env[ast.value];
+        if (value === undefined) {
+          throw new Error("Undefined variable: " + ast.value);
+        }
         return value;
       case "number":
         return ast.value;
